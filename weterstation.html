@@ -8,9 +8,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e0f7fa;
             text-align: center;
             padding: 20px;
+            transition: background-color 0.5s;
+        }
+        body.rising {
+            background-color: #ff5722;
+        }
+        body.falling {
+            background-color: #0288d1;
+        }
+        body.steady {
+            background-color: #4caf50;
         }
         .weather-box {
             background-color: #ffffff;
@@ -18,16 +27,6 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             display: inline-block;
-            transition: border 0.5s;
-        }
-        .weather-box.rising {
-            border: 3px solid #ff5722;
-        }
-        .weather-box.falling {
-            border: 3px solid #0288d1;
-        }
-        .weather-box.steady {
-            border: 3px solid #4caf50;
         }
         h1 {
             font-size: 2em;
@@ -59,9 +58,15 @@
         #temp-plot {
             margin-top: 20px;
         }
+        .weather-condition {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
     </style>
 </head>
-<body>
+<body id="body">
     <nav>
         <ul class="navbar">
             <li><a href="homepage.html">Home</a></li>
@@ -69,10 +74,13 @@
             <li><a href="historie.html">Projekt</a></li>
         </ul>
     </nav>
-    <div class="weather-box" id="weather-box">
+    <div class="weather-box">
         <h1>Wetterstation</h1>
         <div class="weather-info">Ort: <strong>Essen-West</strong></div>
-        <div class="weather-info">Bedingungen: <strong>Sonnig</strong></div>
+        <div class="weather-info weather-condition">
+            Bedingungen: <strong id="condition">Lädt...</strong>
+            <span id="condition-icon"></span>
+        </div>
         <div class="weather-info temp">Temperatur: <strong id="temperature">Lädt...</strong></div>
         <div class="weather-info">Trend: <strong id="trend">Lädt...</strong></div>
     </div>
@@ -85,11 +93,28 @@
                 .then(data => {
                     const temperatureElement = document.getElementById("temperature");
                     const trendElement = document.getElementById("trend");
-                    const weatherBox = document.getElementById("weather-box");
+                    const conditionElement = document.getElementById("condition");
+                    const conditionIconElement = document.getElementById("condition-icon");
+                    const body = document.getElementById("body");
 
                     // Aktuelle Temperatur
                     const currentTemp = data.temperatures[0];
                     temperatureElement.textContent = `${currentTemp.toFixed(2)} °C`;
+
+                    // Wetterbedingungen basierend auf Temperatur
+                    let condition, icon;
+                    if (currentTemp >= 26) {
+                        condition = "Sonnig";
+                        icon = "☀️";
+                    } else if (currentTemp >= 18 && currentTemp <= 25) {
+                        condition = "Wolkig";
+                        icon = "☁️";
+                    } else {
+                        condition = "Regen";
+                        icon = "🌧️";
+                    }
+                    conditionElement.textContent = condition;
+                    conditionIconElement.textContent = icon;
 
                     // Trend bestimmen
                     let trend = "steady";
@@ -109,8 +134,8 @@
                     }
                     trendElement.textContent = trend === "rising" ? "Steigend" : trend === "falling" ? "Fallend" : "Stabil";
 
-                    // CSS-Klasse basierend auf Trend
-                    weatherBox.className = `weather-box ${trend}`;
+                    // CSS-Klasse basierend auf Trend für den gesamten body
+                    body.className = trend;
 
                     // Plotly-Graph
                     const trace = {
@@ -133,6 +158,8 @@
                     console.error("Fehler beim Abrufen der Daten:", error);
                     document.getElementById("temperature").textContent = "Fehler beim Laden";
                     document.getElementById("trend").textContent = "Fehler";
+                    document.getElementById("condition").textContent = "Fehler";
+                    document.getElementById("condition-icon").textContent = "";
                 });
         }
 
