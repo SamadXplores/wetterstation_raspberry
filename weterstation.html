@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wetterstation - 30°C Steigend</title>
+    <title>Wetterstation</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
             text-align: center;
             padding: 20px;
-            background-color: #ff5722;
         }
         .weather-box {
             background-color: #ffffff;
@@ -17,6 +18,16 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             display: inline-block;
+            transition: border 0.5s;
+        }
+        .weather-box.rising {
+            border: 3px solid #ff5722;
+        }
+        .weather-box.falling {
+            border: 3px solid #0288d1;
+        }
+        .weather-box.steady {
+            border: 3px solid #4caf50;
         }
         h1 {
             font-size: 2em;
@@ -45,6 +56,9 @@
             color: #00796b;
             font-size: 1.2em;
         }
+        #temp-plot {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -55,12 +69,76 @@
             <li><a href="historie.html">Projekt</a></li>
         </ul>
     </nav>
-    <div class="weather-box">
+    <div class="weather-box" id="weather-box">
         <h1>Wetterstation</h1>
         <div class="weather-info">Ort: <strong>Essen-West</strong></div>
         <div class="weather-info">Bedingungen: <strong>Sonnig</strong></div>
-        <div class="weather-info temp">Temperatur: <strong>30.00 °C</strong></div>
-        <div class="weather-info">Trend: <strong>Steigend</strong></div>
+        <div class="weather-info temp">Temperatur: <strong id="temperature">Lädt...</strong></div>
+        <div class="weather-info">Trend: <strong id="trend">Lädt...</strong></div>
     </div>
+    <div id="temp-plot"></div>
+
+    <script>
+        function getTemperatureData() {
+            fetch('temperature_history.json')
+                .then(response => response.json())
+                .then(data => {
+                    const temperatureElement = document.getElementById("temperature");
+                    const trendElement = document.getElementById("trend");
+                    const weatherBox = document.getElementById("weather-box");
+
+                    // Aktuelle Temperatur
+                    const currentTemp = data.temperatures[0];
+                    temperatureElement.textContent = `${currentTemp.toFixed(2)} °C`;
+
+                    // Trend bestimmen
+                    let trend = "steady";
+                    if (data.temperatures.length >= 3) {
+                        const recentTemps = data.temperatures.slice(0, 3);
+                        const avgRecent = recentTemps.reduce((a, b) => a + b, 0) / recentTemps.length;
+                        const prevTemps = data.temperatures.slice(3, 6);
+                        const avgPrev = prevTemps.length ? prevTemps.reduce((a, b) => a + b, 0) / prevTemps.length : avgRecent;
+                        const diff = avgRecent - avgPrev;
+                        if (Math.abs(diff) <= 1) {
+                            trend = "steady";
+                        } else if (diff > 0) {
+                            trend = "rising";
+                        } else {
+                            trend = "falling";
+                        }
+                    }
+                    trendElement.textContent = trend === "rising" ? "Steigend" : trend === "falling" ? "Fallend" : "Stabil";
+
+                    // CSS-Klasse basierend auf Trend
+                    weatherBox.className = `weather-box ${trend}`;
+
+                    // Plotly-Graph
+                    const trace = {
+                        x: data.times,
+                        y: data.temperatures,
+                        mode: 'lines+markers',
+                        name: 'Temperatur',
+                        line: { color: '#00796b' }
+                    };
+                    const layout = {
+                        title: 'Temperaturverlauf (Letzte 100 Messungen)',
+                        xaxis: { title: 'Zeit' },
+                        yaxis: { title: 'Temperatur (°C)' },
+                        showlegend: true,
+                        height: 400
+                    };
+                    Plotly.newPlot('temp-plot', [trace], layout);
+                })
+                .catch(error => {
+                    console.error("Fehler beim Abrufen der Daten:", error);
+                    document.getElementById("temperature").textContent = "Fehler beim Laden";
+                    document.getElementById("trend").textContent = "Fehler";
+                });
+        }
+
+        // Initialer Aufruf und alle 5 Sekunden
+        getTemperatureData();
+        setInterval(getTemperatureData, 5000);
+    </script>
 </body>
 </html>
