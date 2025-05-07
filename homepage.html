@@ -3,31 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Willkommen - Wetterstation</title>
     <style>
-		body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #e0f7fa;
             text-align: center;
             padding: 20px;
+            margin: 0;
         }
-        .h1{
-			color: #25869
-		}	
         .navbar {
             display: flex;
-            grid-template-columns: row;
-            justify-items: center;
+            justify-content: center;
             align-items: center;
-            gap: 15px; 
+            gap: 15px;
+            margin-bottom: 20px;
         }
         .navbar li {
-            list-style: none; /* Entfernt die Standardaufzählung der Listenelemente */
+            list-style: none;
         }
         .navbar a {
-            text-decoration: none; /* Entfernt die Unterstreichung der Links */
-            color: #00796b; /* Setzt die Linkfarbe */
-            font-size: 1.2em; /* Setzt die Schriftgröße der Links */
+            text-decoration: none;
+            color: #00796b;
+            font-size: 1.2em;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .navbar a:hover {
+            background: #ff5722;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+        .content {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #00796b;
+            margin: 20px 0;
+            animation: slideIn 1s ease-out;
+        }
+        p {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .creators {
+            font-size: 1.1em;
+            font-style: italic;
+            color: #00796b;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .creators a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #00796b;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .creators a:hover {
+            color: #ff5722;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff5722;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1em;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .cta-button:hover {
+            background: #00796b;
+            transform: scale(1.05);
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #333;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            animation: spin 10s linear infinite;
+        }
+        .weather-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            font-size: 2em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            p { font-size: 1em; }
+            .navbar a { font-size: 1em; padding: 8px 12px; }
+            .logo { width: 80px; height: 80px; }
+            .weather-icons { font-size: 1.5em; gap: 15px; }
         }
     </style>
 </head>
@@ -36,17 +136,42 @@
         <ul class="navbar">
             <li><a href="homepage.html">Home</a></li>
             <li><a href="weterstation.html">Wetter</a></li>
-            <li><a href="historie.html">Historie</a></li>
+            <li><a href="historie.html">Projekt</a></li>
         </ul>
     </nav>
 
-    <section>
-        <h1>Homepage</h2>
-        <p>Dies ist eine einfache HTML-Seite, die ich erstellt habe, um dir zu zeigen, wie HTML funktioniert.</p>
+    <section class="content">
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="40" fill="#ff5722"/>
+            <path d="M50 20 A30 30 0 0 1 80 50 A30 30 0 0 1 50 80 A30 30 0 0 1 20 50 A30 30 0 0 1 50 20" fill="#ffffff" opacity="0.8"/>
+            <circle cx="50" cy="50" r="10" fill="#00796b"/>
+        </svg>
+        <h1>Willkommen zu unserer Wetterstation</h1>
+        <p>Tauche ein in unser Projekt zur Temperaturüberwachung! Wir liefern dir Echtzeit-Daten, beeindruckende Verläufe und einen Kanal für dein Feedback – alles verpackt in einem stylischen Design.</p>
+        <div class="weather-icons">
+            <span>☀️</span>
+            <span>☁️</span>
+            <span>🌧️</span>
+        </div>
+        <p class="creators">
+            <a href="https://github.com/SamadXplores" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.13-1.47-1.13-1.47-.92-.62.07-.61.07-.61 1.02.07 1.56 1.05 1.56 1.05.91 1.54 2.39 1.1 2.97.84.09-.65.35-1.1.64-1.35-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.564 9.564 0 0 1 12 6.8c.85.004 1.71.114 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.59.67.5A10.013 10.013 0 0 0 22 12 10 10 0 0 0 12 2z"/>
+                </svg>
+                Abdessamad Azouagh
+            </a>
+            <a href="https://github.com/Kirivyl" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.13-1.47-1.13-1.47-.92-.62.07-.61.07-.61 1.02.07 1.56 1.05 1.56 1.05.91 1.54 2.39 1.1 2.97.84.09-.65.35-1.1.64-1.35-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.564 9.564 0 0 1 12 6.8c.85.004 1.71.114 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.59.67.5A10.013 10.013 0 0 0 22 12 10 10 0 0 0 12 2z"/>
+                </svg>
+                Daniel Panförder
+            </a>
+        </p>
+        <a href="weterstation.html" class="cta-button">Zum Wetter-Dashboard</a>
     </section>
 
     <footer>
-        <p>&copy; 2025 Meine Webseite</p>
+        <p>© 2025 Azouagh & Panförder</p>
     </footer>
 </body>
 </html>
