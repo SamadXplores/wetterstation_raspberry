@@ -8,37 +8,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
             text-align: center;
             padding: 20px;
-            transition: background-color 0.5s;
-        }
-        body.rising {
-            background-color: #ff5722;
-        }
-        body.falling {
-            background-color: #0288d1;
-        }
-        body.steady {
-            background-color: #4caf50;
-        }
-        .weather-box {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            display: inline-block;
-        }
-        h1 {
-            font-size: 2em;
-            color: #00796b;
-        }
-        .weather-info {
-            font-size: 1.2em;
-            margin: 10px 0;
-        }
-        .temp {
-            font-size: 3em;
-            color: #ff5722;
+            margin: 0;
         }
         .navbar {
             display: flex;
@@ -54,9 +27,45 @@
             text-decoration: none;
             color: #00796b;
             font-size: 1.2em;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s, transform 0.3s;
         }
-        #temp-plot {
-            margin-top: 20px;
+        .navbar a:hover {
+            background: #ff5722;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+        .weather-box {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: inline-block;
+            transition: border 0.5s;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .weather-box.sonnig {
+            border: 3px solid #ff5722;
+        }
+        .weather-box.wolkig {
+            border: 3px solid #0288d1;
+        }
+        .weather-box.regen {
+            border: 3px solid #4caf50;
+        }
+        h1 {
+            font-size: 2em;
+            color: #00796b;
+            animation: slideIn 1s ease-out;
+        }
+        .weather-info {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .temp {
+            font-size: 3em;
+            color: #ff5722;
         }
         .weather-condition {
             display: flex;
@@ -64,9 +73,26 @@
             justify-content: center;
             gap: 10px;
         }
+        #temp-plot {
+            margin-top: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .weather-info { font-size: 1em; }
+            .temp { font-size: 2.5em; }
+            .navbar a { font-size: 1em; padding: 8px 12px; }
+        }
     </style>
 </head>
-<body id="body">
+<body>
     <nav>
         <ul class="navbar">
             <li><a href="homepage.html">Home</a></li>
@@ -74,7 +100,7 @@
             <li><a href="historie.html">Projekt</a></li>
         </ul>
     </nav>
-    <div class="weather-box">
+    <div class="weather-box" id="weather-box">
         <h1>Wetterstation</h1>
         <div class="weather-info">Ort: <strong>Essen-West</strong></div>
         <div class="weather-info weather-condition">
@@ -95,28 +121,31 @@
                     const trendElement = document.getElementById("trend");
                     const conditionElement = document.getElementById("condition");
                     const conditionIconElement = document.getElementById("condition-icon");
-                    const body = document.getElementById("body");
+                    const weatherBox = document.getElementById("weather-box");
 
                     // Aktuelle Temperatur
                     const currentTemp = data.temperatures[0];
                     temperatureElement.textContent = `${currentTemp.toFixed(2)} °C`;
 
                     // Wetterbedingungen basierend auf Temperatur
-                    let condition, icon;
+                    let condition, icon, conditionClass;
                     if (currentTemp >= 26) {
                         condition = "Sonnig";
                         icon = "☀️";
+                        conditionClass = "sonnig";
                     } else if (currentTemp >= 18 && currentTemp <= 25) {
                         condition = "Wolkig";
                         icon = "☁️";
+                        conditionClass = "wolkig";
                     } else {
                         condition = "Regen";
                         icon = "🌧️";
+                        conditionClass = "regen";
                     }
                     conditionElement.textContent = condition;
                     conditionIconElement.textContent = icon;
 
-                    // Trend bestimmen
+                    // Trend bestimmen (nur für Anzeige, nicht für Border)
                     let trend = "steady";
                     if (data.temperatures.length >= 3) {
                         const recentTemps = data.temperatures.slice(0, 3);
@@ -134,8 +163,8 @@
                     }
                     trendElement.textContent = trend === "rising" ? "Steigend" : trend === "falling" ? "Fallend" : "Stabil";
 
-                    // CSS-Klasse basierend auf Trend für den gesamten body
-                    body.className = trend;
+                    // CSS-Klasse basierend auf Wetterbedingung für weather-box
+                    weatherBox.className = `weather-box ${conditionClass}`;
 
                     // Plotly-Graph
                     const trace = {
