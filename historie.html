@@ -3,28 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Projektinformationen</title>
     <style>
-		body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #e0f7fa;
             text-align: center;
             padding: 20px;
         }
+        h1 {
+            color: #00796b;
+        }
         .navbar {
             display: flex;
-            grid-template-columns: row;
-            justify-items: center;
+            justify-content: center;
             align-items: center;
-            gap: 15px; 
+            gap: 15px;
+            margin-bottom: 20px;
         }
         .navbar li {
-            list-style: none; /* Entfernt die Standardaufzählung der Listenelemente */
+            list-style: none;
         }
         .navbar a {
-            text-decoration: none; /* Entfernt die Unterstreichung der Links */
-            color: #00796b; /* Setzt die Linkfarbe */
-            font-size: 1.2em; /* Setzt die Schriftgröße der Links */
+            text-decoration: none;
+            color: #00796b;
+            font-size: 1.2em;
+        }
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #00796b;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #00796b;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004d40;
         }
     </style>
 </head>
@@ -33,17 +67,47 @@
         <ul class="navbar">
             <li><a href="homepage.html">Home</a></li>
             <li><a href="weterstation.html">Wetter</a></li>
-            <li><a href="historie.html">Historie</a></li>
+            <li><a href="historie.html">Projekt</a></li>
         </ul>
     </nav>
 
-    <section>
-        <h2>Historie</h2>
-        <p>Dies ist eine einfache HTML-Seite, die ich erstellt habe, um dir zu zeigen, wie HTML funktioniert.</p>
+    <section class="form-container">
+        <h1>Projektinformationen</h1>
+        <div>
+            <label for="project-name">Projektname</label>
+            <input type="text" id="project-name" name="project-name" required>
+            
+            <label for="author">Autor</label>
+            <input type="text" id="author" name="author" required>
+            
+            <label for="description">Beschreibung</label>
+            <textarea id="description" name="description" rows="5" required></textarea>
+            
+            <label for="date">Datum</label>
+            <input type="date" id="date" name="date" required>
+            
+            <button onclick="submitForm()">Absenden</button>
+        </div>
     </section>
 
     <footer>
         <p>&copy; 2025 Meine Webseite</p>
     </footer>
+
+    <script>
+        function submitForm() {
+            const projectName = document.getElementById("project-name").value;
+            const author = document.getElementById("author").value;
+            const description = document.getElementById("description").value;
+            const date = document.getElementById("date").value;
+
+            if (projectName && author && description && date) {
+                alert("Formular abgesendet!\n\nProjektname: " + projectName + "\nAutor: " + author + "\nBeschreibung: " + description + "\nDatum: " + date);
+                // Hier könnte eine echte Absendelogik implementiert werden
+            } else {
+                alert("Bitte fülle alle Felder aus.");
+            }
+        }
+    </script>
 </body>
 </html>
