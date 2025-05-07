@@ -1,1 +1,6 @@
 # wetterstation_raspberry
+
+Ein System zur Temperaturüberwachung mit einem Raspberry Pi. Dazu wollen wir ein Python-Skript erstellen, welches die Daten eines Temperatursensors (z. B. des DS18B20), den wir über die GPIO-Pins mit unserem Raspberry Pi verbunden haben, ausliest und verarbeitet. Die hieraus gewonnenen Daten möchten wir dann auf einem von uns ebenfalls eingerichteten Apache-Webserver bereitstellen, um sie dort in Echtzeit darzustellen.
+Konkret erstellen wir hierfür drei zentrale HTML-Dateien: Eine Startseite, auf welcher wir das Projekt vorstellen, eine „dynamische” Anzeige für die Temperatur, welche auch den Verlauf anzeigt und ein „Kontaktformular“, falls jemand Fragen oder Anmerkungen zu unserem Projekt hat.
+Auf der Seite mit der Temperatur, passen wir das Layout der Seite eben an, indem wir bspw. einen Wert, der steigt, rot, einer der sinkt blau darstellen lassen.
+Im Endeffekt bekommen wir hier ein System, mit welchem wir nicht nur ziemlich genau die Temperatur von irgendwas messen können, sondern diese auch noch optisch ansprechend und interpretierbar darstellen können. Gleichzeitig haben wir damit auch noch gezeigt, wie man einen eigenen Online-Webspace – inkl. eines sicheren Zugangs – erstellen und auch verwendend kann.
